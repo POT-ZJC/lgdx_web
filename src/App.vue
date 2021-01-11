@@ -11,20 +11,20 @@
 export default {
   name: "app",
   computed: {
-    key() {
+    key () {
       return this.$route.fullPath;
     },
     // htmlSize() {
     //     return store.htmlSize
     // }
   },
-  data() {
+  data () {
     return {
       // htmlFontSize: 96, // 默认在1920 宽度的屏幕 ，1920 html根字体=96
       htmlEl: document.querySelector("html"),
     };
   },
-  created() {
+  created () {
     // mutations.setHtmlSize(computedFontSize(this.htmlEl));
 
     // window.onresize = () => {
@@ -32,7 +32,7 @@ export default {
     //   mutations.setHtmlSize(computedFontSize(this.htmlEl));
     // };
   },
-  mounted() {},
+  mounted () { },
   // destroyed() {
   //   this.htmlEl.style.fontSize = "14px";
   //   mutations.setHtmlSize(14);
@@ -41,8 +41,8 @@ export default {
 };
 </script>
 <style lang="scss">
+@import "./styles/normalize.css";
 //  @function torem($px, $base-font-size: 96px) {
-
 // 	@return ($px / $base-font-size) * 1rem;
 // }
 html,
@@ -50,8 +50,8 @@ body {
   -webkit-text-size-adjust: none;
   margin: 0;
   height: 100%;
-  min-width: 1620px;;
-  min-height:768px ; 
+  min-width: 1620px;
+  min-height: 768px;
   font-family: PingFang SC, PingFang SC-Medium;
 }
 div {
@@ -60,10 +60,9 @@ div {
   font-family: PingFang SC, PingFang SC-Medium;
 }
 body {
- background-color: #E9F0F5;
+  background-color: #e9f0f5;
 }
 #app {
   height: inherit;
 }
- 
 </style>
