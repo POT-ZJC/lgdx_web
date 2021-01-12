@@ -5,34 +5,32 @@
 </template>
 
 <script>
-
 // import { mutations, store } from "@/store.js";
 // import { computedFontSize } from "./htmlFontSize";
 export default {
   name: "app",
   computed: {
-    key () {
+    key() {
       return this.$route.fullPath;
     },
     // htmlSize() {
     //     return store.htmlSize
     // }
   },
-  data () {
+  data() {
     return {
       // htmlFontSize: 96, // 默认在1920 宽度的屏幕 ，1920 html根字体=96
       htmlEl: document.querySelector("html"),
     };
   },
-  created () {
+  created() {
     // mutations.setHtmlSize(computedFontSize(this.htmlEl));
-
     // window.onresize = () => {
     //   // this.htmlFontSize = computedFontSize(this.htmlEl)
     //   mutations.setHtmlSize(computedFontSize(this.htmlEl));
     // };
   },
-  mounted () { },
+  mounted() {},
   // destroyed() {
   //   this.htmlEl.style.fontSize = "14px";
   //   mutations.setHtmlSize(14);
@@ -64,5 +62,11 @@ body {
 }
 #app {
   height: inherit;
+}
+.theme-color {
+  color: #42c9a8;
+}
+.theme-bgc {
+  background-color: #42c9a8;
 }
 </style>
