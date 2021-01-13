@@ -87,14 +87,18 @@ export default {
         const { matched } = val;
         console.log(matched);
         this.firstMenuKey = matched[0].path;
-        this.secondMenuKey = matched[1].meta.menu;
+        if (matched[1]) {
+          this.secondMenuKey = matched[1].meta.menu;
 
-        for (let i = 0; i < this.menuList.length; i++) {
-          const menu = this.menuList[i];
-          if (this.firstMenuKey === menu.path) {
-            this.secondMenu = menu.children || [];
-            break;
+          for (let i = 0; i < this.menuList.length; i++) {
+            const menu = this.menuList[i];
+            if (this.firstMenuKey === menu.path) {
+              this.secondMenu = menu.children || [];
+              break;
+            }
           }
+        } else {
+          this.secondMenuKey = "";
         }
       },
       immediate: true,

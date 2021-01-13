@@ -39,7 +39,7 @@ export default {
   color: rgba(128, 134, 149, 1);
 }
 /deep/.common-view {
-  background: #ffffff;
+  background: #ffffff; 
   min-height: 600px;
   border-radius: 10px;
   padding: 0 20px;
