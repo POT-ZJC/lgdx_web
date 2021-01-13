@@ -1,28 +1,13 @@
 <template>
-  <div
-    class="left-menu"
-    :style="`width:${secondMenu.length > 1 ? 220 : 100}px`"
-  >
+  <div class="left-menu" :style="`width:${secondMenu.length > 1 ? 220 : 100}px`">
     <div class="menu-first">
-      <div
-        class="first-item"
-        :class="{ 'first-item-active': firstMenuKey === item.path }"
-        v-for="(item, index) in menuList"
-        :key="index"
-        @click="firstMenuClick(item)"
-      >
+      <div class="first-item" :class="{ 'first-item-active': firstMenuKey === item.path }" v-for="(item, index) in menuList" :key="index" @click="firstMenuClick(item)">
         <img :src="item.icon" alt="" class="icon" />
         <div class="first-item-name">{{ item.name }}</div>
       </div>
     </div>
     <div class="menu-second" v-show="secondMenu.length > 1">
-      <div
-        class="second-item"
-        :class="{ 'second-item-active': secondMenuKey === item.path }"
-        v-for="(item, index) in secondMenu"
-        :key="index"
-        @click="secondMenuClick(item)"
-      >
+      <div class="second-item" :class="{ 'second-item-active': secondMenuKey === item.path }" v-for="(item, index) in secondMenu" :key="index" @click="secondMenuClick(item)">
         <div class="second-item-name">{{ item.name }}</div>
       </div>
     </div>
@@ -30,7 +15,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       menuList: [
         {
@@ -57,6 +42,18 @@ export default {
               name: "人员进出管理",
               path: "/laboratory/personnelInAndOut",
             },
+            {
+              name: "照明控制",
+              path: "/control/lighting",
+            },
+            {
+              name: "窗帘控制",
+              path: "/control/curtain",
+            },
+            {
+              name: "一体机",
+              path: "/equipment/IntegratedMachine",
+            }
           ],
         },
 
@@ -83,10 +80,10 @@ export default {
       ],
     };
   },
-  created() {},
+  created () { },
   watch: {
     $route: {
-      handler(val) {
+      handler (val) {
         const { matched } = val;
         console.log(matched);
         this.firstMenuKey = matched[0].path;
@@ -105,7 +102,7 @@ export default {
     },
   },
   methods: {
-    firstMenuClick(menu) {
+    firstMenuClick (menu) {
       if (this.firstMenuKey !== menu.path) {
         if (this.secondMenuKey !== menu.children[0].path) {
           this.$router.push(menu.children[0].path);
@@ -113,7 +110,7 @@ export default {
       } else {
       }
     },
-    secondMenuClick(menu) {
+    secondMenuClick (menu) {
       if (this.secondMenuKey !== menu.path) {
         this.secondMenuKey = menu.path;
         this.$router.push(this.secondMenuKey);

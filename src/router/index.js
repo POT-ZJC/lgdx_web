@@ -49,6 +49,30 @@ const routes = [
         meta: {
           menu: '/laboratory/personnelInAndOut',
         }
+      },
+      {
+        path: '/control/lighting',
+        name: '照明控制',
+        component: () => import('@/views/control/lighting'),
+        meta: {
+          menu: '/control/lighting',
+        }
+      },
+      {
+        path: '/control/curtain',
+        name: '窗帘控制',
+        component: () => import('@/views/control/curtain'),
+        meta: {
+          menu: '/control/curtain',
+        }
+      },
+      {
+        path: '/equipment/IntegratedMachine',
+        name: '一体机',
+        component: () => import('@/views/equipment/integratedMachine'),
+        meta: {
+          menu: '/equipment/IntegratedMachine',
+        }
       }
     ]
   },

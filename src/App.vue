@@ -64,5 +64,91 @@ body {
 }
 #app {
   height: inherit;
+  .el-table {
+    .el-table__row--striped td {
+      background-color: #e9f0f5;
+    }
+    thead .cell {
+      height: 40px;
+      color: #fff;
+      font-size: 14px;
+      line-height: 40px;
+      background-color: #42c9a8;
+    }
+    tbody .cell {
+      height: 36px;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      color: #272a39;
+      font-size: 12px;
+      line-height: 36px;
+    }
+    th,
+    td {
+      padding: 0;
+      border-bottom: none;
+    }
+    th:not(:first-of-type) {
+      border-left: 1px solid #fff;
+    }
+  }
+  .el-tabs {
+    .el-tabs__nav {
+      border: none;
+    }
+    .el-tabs__item {
+      height: 52px;
+      color: #999999;
+      font-size: 14px;
+      line-height: 52px;
+      font-weight: 400;
+      padding: 0 47px;
+      border: none;
+    }
+    .is-active {
+      color: #42c9a8;
+      border-bottom: 2px solid #42c9a8;
+      background-color: rgba(66, 201, 168, 0.1);
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+  }
+  .el-pagination {
+    padding: 0;
+    .number {
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+      color: #7b7b7b;
+      text-align: center;
+      line-height: 28px;
+      font-weight: 400;
+      padding: 0;
+      border: 1px solid #c8c8c8;
+      border-radius: 6px;
+      background-color: #fff;
+    }
+    .active {
+      color: #fff;
+      border: none;
+      background-color: #42c9a8;
+    }
+    .btn-prev,
+    .btn-next {
+      border: 1px solid #c8c8c8;
+      border-radius: 6px;
+      background-color: #fff;
+    }
+    .btn-quicknext {
+      color: #7b7b7b;
+      background-color: #fff;
+    }
+    .el-pagination__total,
+    .el-pagination__jump {
+      color: #7b7b7b;
+    }
+  }
 }
 </style>

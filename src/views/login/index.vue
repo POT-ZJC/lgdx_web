@@ -129,7 +129,7 @@ export default {
   border-radius: 52px;
   cursor: pointer;
   &:active {
-    background-color: lighten(#42c9a8, 15%);
+    opacity: 0.8;
   }
 }
 .main-form-forgot {
