@@ -212,6 +212,10 @@ export default {
   padding: 0 16px;
   background-color: #e9f0f5;
   border-radius: 6px;
+  cursor: pointer;
+  &:active {
+    opacity: 0.8;
+  }
   &:not(:first-of-type) {
     margin-left: 10px;
   }
