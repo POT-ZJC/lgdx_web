@@ -10,7 +10,7 @@
           <today-in-and-out />
         </el-tab-pane>
         <el-tab-pane label="历史数据" name="history">
-
+          <history-in-and-out />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -20,6 +20,7 @@
 
 <script>
 import todayInAndOut from './components/todayInAndOut'
+import historyInAndOut from './components/historyInAndOut'
 export default {
   data () {
     return {
@@ -32,7 +33,8 @@ export default {
     }
   },
   components: {
-    todayInAndOut
+    todayInAndOut,
+    historyInAndOut
   }
 }
 </script>
@@ -41,7 +43,7 @@ export default {
 .PersonnelInAndOut {
   color: #272a39;
   font-size: 18px;
-  line-height: 28px;
+  line-height: 24px;
 }
 .main {
   padding: 0 20px 20px;

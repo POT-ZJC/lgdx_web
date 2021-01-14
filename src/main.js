@@ -8,7 +8,7 @@ import router from './router'
 // } from 'element-ui';
 import ElementUI from 'element-ui'
 // 自定义element-ui主题
-// import './element-variables.scss'
+import '../element-variables.scss'
 // import VueAwesomeSwiper from 'vue-awesome-swiper' 
 // import 'swiper/swiper-bundle.css' 
 Vue.use(ElementUI, {

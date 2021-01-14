@@ -39,6 +39,10 @@ export default {
               path: "/laboratory/electricalTesting",
             },
             {
+              name: "电气火灾历史数据",
+              path: "/laboratory/electricalHistory",
+            },
+            {
               name: "人员进出管理",
               path: "/laboratory/personnelInAndOut",
             },

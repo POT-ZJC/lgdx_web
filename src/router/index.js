@@ -43,6 +43,14 @@ const routes = [
         }
       },
       {
+        path: '/laboratory/electricalHistory',
+        name: '电气火灾历史数据',
+        component: () => import('@/views/laboratory/electricalHistory'),
+        meta: {
+          menu: '/laboratory/electricalHistory',
+        }
+      },
+      {
         path: '/laboratory/personnelInAndOut',
         name: '人员进出管理',
         component: () => import('@/views/laboratory/personnelInAndOut'),

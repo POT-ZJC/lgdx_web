@@ -44,6 +44,9 @@ export default {
 
 <style lang="scss" scoped>
 .IntegratedMachine {
+  color: #272a39;
+  font-size: 18px;
+  line-height: 24px;
 }
 .main {
   padding: 30px;

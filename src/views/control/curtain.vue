@@ -131,7 +131,7 @@ export default {
 .ControlCurtain {
   color: #272a39;
   font-size: 18px;
-  line-height: 28px;
+  line-height: 24px;
 }
 .main-box {
   padding: 20px;
