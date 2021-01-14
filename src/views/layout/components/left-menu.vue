@@ -130,7 +130,7 @@ export default {
     firstMenuClick(menu) {
       console.log(menu);
       if (this.firstMenuKey !== menu.path) {
-        if (menu.children && mengu.children.length) {
+        if (menu.children && menu.children.length) {
           if (this.secondMenuKey !== menu.children[0].path) {
             this.$router.push(menu.children[0].path);
           }
