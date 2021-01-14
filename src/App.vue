@@ -155,4 +155,10 @@ body {
 .theme-bgc {
   background-color: #42c9a8;
 }
+.normal-color {
+  color: #00ff21;
+}
+.error-color {
+  color: #ff2a2a;
+}
 </style>

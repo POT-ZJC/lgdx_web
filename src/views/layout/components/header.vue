@@ -1,7 +1,11 @@
 <template>
   <div class="layout-head">
     <div class="head">
-      <img src="./img/资源 2.png" class="head-logo" alt="" />
+      <img
+        :src="require('@/asstes/images/资源 2.png')"
+        class="head-logo"
+        alt=""
+      />
       <div class="head-title">安全智慧实验室</div>
       <div class="head-right">
         <img src="./img/账号.png" class="account" alt="账号" />

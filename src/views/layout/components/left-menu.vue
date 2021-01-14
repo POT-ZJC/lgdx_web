@@ -68,6 +68,7 @@ export default {
         {
           icon: "/images/工具-2.svg",
           name: "设备",
+          path:'/laboratoryDetail'
         },
       ],
       secondMenuKey: "",
@@ -111,6 +112,7 @@ export default {
   },
   methods: {
     firstMenuClick (menu) {
+      console.log(menu)
       if (this.firstMenuKey !== menu.path) {
         if (this.secondMenuKey !== menu.children[0].path) {
           this.$router.push(menu.children[0].path);

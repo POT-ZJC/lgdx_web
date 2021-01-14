@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import laboratoryDetail from '@/views/laboratory/show-detail'
 Vue.use(VueRouter)
 
 const routes = [
@@ -15,10 +15,16 @@ const routes = [
     name: 'default',
     component: () => import('@/views/layout'),
   },
+  //安全智慧实验室
+  {
+    path: '/laboratoryDetail',
+    name: 'laboratoryDetail',
+    component: laboratoryDetail
+  },
   {
     path: '/home',
-    component: () => import('@/views/layout'), 
-    redirect:  '/home/index',
+    component: () => import('@/views/layout'),
+    redirect: '/home/index',
     children: [
       {
         path: '/home/index',
@@ -31,7 +37,7 @@ const routes = [
   },
   {
     path: '/laboratory',
-    redirect:  '/laboratory/electricalTesting',
+    redirect: '/laboratory/electricalTesting',
     component: () => import('@/views/layout'),
     children: [
       {
