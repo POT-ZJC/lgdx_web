@@ -8,13 +8,13 @@
       <div class="main-form" v-show="!error">
         <label class="main-form-label">
           <p class="key">账号</p>
-          <input class="val" type="text" placeholder="请输入账号">
+          <input class="val" type="text" v-model="form.userName" placeholder="请输入账号" maxlength="15">
         </label>
         <label class="main-form-label">
           <p class="key">密码</p>
-          <input class="val" type="password" placeholder="请输入密码">
+          <input class="val" type="password" v-model="form.userPass" placeholder="请输入密码" maxlength="15">
         </label>
-        <a class="main-form-submit" @click="error = true">登陆</a>
+        <a class="main-form-submit" @click="login">登陆</a>
         <a class="main-form-forgot">忘记密码</a>
       </div>
       <div class="main-error" v-show="error">
@@ -30,7 +30,34 @@
 export default {
   data () {
     return {
+      form: {
+        userName: '',
+        userPass: '',
+        verificationCode: 'f6gp',
+      },
       error: false
+    }
+  },
+  methods: {
+    async login () {
+      const { userName, userPass } = this.form
+      if (!userName.trim() || !userPass.trim()) {
+        this.$message.error('账号和密码必填。');
+        return
+      }
+      if (userName.trim().length < 6 || userPass.trim().length < 6) {
+        this.$message.error('账号和密码最少6位。');
+        return
+      }
+      const res = await this.$http('/api/login', this.form)
+      if (+res.resultCode === 200) {
+        this.$message({
+          message: '登录成功',
+          type: 'success'
+        })
+        this.$store.user = res.data
+        this.$router.push('/home/index')
+      }
     }
   }
 }

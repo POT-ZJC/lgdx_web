@@ -50,20 +50,7 @@ module.exports = {
         port: 8088,
         https: false,
         hotOnly: false,
-        proxy: {
-            /*
-             * 配置跨域；配置多个跨域；
-             * 需要重启，方能生效；
-             */
-            '/api': {
-                target: 'http://113.204.236.218:30255', //跨域地址
-                // changeOrigin: true,  // 修改自身服务器的域名, 与后端接口一致, 形成跨域
-                ws: false,  // 是否使用https
-                pathRewrite: {
-                    '^/api': ''
-                }
-            }
-        },
+        proxy: 'http://113.204.236.218:9087'
         // before: app => {
         // }
     }

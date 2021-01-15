@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router' 
- 
+import store from './store'
+import {http} from './api'
 // import {
 //   Icon, Tree, Dialog, Button, Pagination
 //   // Select
@@ -11,6 +12,10 @@ import ElementUI from 'element-ui'
 import '../element-variables.scss'
 // import VueAwesomeSwiper from 'vue-awesome-swiper' 
 // import 'swiper/swiper-bundle.css' 
+
+Vue.prototype.$http = http
+Vue.prototype.$store = store
+
 Vue.use(ElementUI, {
   size: 'mini'
 })

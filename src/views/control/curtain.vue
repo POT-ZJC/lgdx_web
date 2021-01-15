@@ -2,7 +2,7 @@
   <div class="ControlCurtain">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item>控制系统</el-breadcrumb-item>
-      <el-breadcrumb-item>窗帘控制</el-breadcrumb-item>
+      <el-breadcrumb-item>照明控制</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="main">
       <div class="main-box">
@@ -11,14 +11,14 @@
           <li class="item">
             <p class="item-key">设备数量：</p>
             <p class="item-val">
-              <span class="item-val-num green">4</span>
+              <span class="item-val-num green">{{total}}</span>
               <span class="item-val-unit">（个）</span>
             </p>
           </li>
           <li class="item">
             <p class="item-key">设备异常：</p>
             <p class="item-val">
-              <span class="item-val-num">0</span>
+              <span class="item-val-num">{{abnormalSum}}</span>
               <span class="item-val-unit">（个）</span>
             </p>
           </li>
@@ -36,22 +36,26 @@
       </ul>
       <div class="main-box">
         <el-table class="main-box-table" :data="tableData" stripe>
-          <el-table-column prop="date" label="序号" header-align="center" />
-          <el-table-column prop="name" label="设备名称" header-align="center" />
+          <el-table-column prop="date" label="序号" header-align="center">
+            <template slot-scope="scope">
+              <div>{{scope.$index + 1}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="devName" label="设备名称" header-align="center" />
           <el-table-column label="设备状态" header-align="center">
             <template slot-scope="scope">
-              <div class="warning">{{scope.row.name}}</div>
+              <div :class="{warning: !+scope.row.devTage}">{{+scope.row.devTage ? "正常" : "异常"}}</div>
             </template>
           </el-table-column>
           <el-table-column label="设备开关" header-align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.name" active-color="#42C9A8" inactive-color="#808695">
+              <el-switch v-model="scope.row.switch" active-color="#42C9A8" inactive-color="#808695" @change="switchChange(scope.row)">
               </el-switch>
             </template>
           </el-table-column>
         </el-table>
         <div class="main-box-pagination">
-          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="100" layout="total, prev, pager, next, jumper" :total="1000" />
+          <el-pagination background @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next, jumper" :total="total" />
           <a class="btn">确定</a>
         </div>
       </div>
@@ -64,65 +68,44 @@ export default {
   data () {
     return {
       currentPage: 1,
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }]
+      size: 10,
+      total: 0,
+      abnormalSum: 0,
+      tableData: []
     }
   },
   methods: {
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`);
-    },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`);
+      this.currentPage = val
+      this.getData()
+    },
+    async getData () {
+      const res = await this.$http('/api/dev/queryByPage', {
+        devType: 1,
+        pageCurrent: this.currentPage,
+        pageRows: this.size
+      })
+      for (let i of res.data.rows) {
+        i.switch = +i.devActive
+      }
+      this.tableData = res.data.rows
+    },
+    async getState () {
+      const res = await this.$http('/api/statistical/queryCurtainsStatistics')
+      this.total = res.data.devSum
+      this.abnormalSum = res.data.abnormalSum
+    },
+    async switchChange (data) {
+      let res = await this.$http('/api/dev/setAttributeValue', {
+        devCode: data.devCode,
+        devIsc: data.devIsc,
+        devActive: data.switch ? '1' : '0'
+      })
     }
+  },
+  created () {
+    this.getState()
+    this.getData()
   }
 }
 </script>

@@ -39,3 +39,8 @@ export const postLaboratoryReserve = data => {
 export const postLaboratoryNotice = data => {
   return post(`/api/message/notice/queryIntegratedMachineNoticeByPage`, data)
 }
+
+// 猫猫偷懒专用 
+export const http = (url, data) => {
+  return post(url, data)
+}
