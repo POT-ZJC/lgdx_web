@@ -4,37 +4,65 @@
     <div class="title">实验人员进出情况</div>
     <div class="desc">
       <div class="desc-label">进出人次：</div>
-      <div class="desc-value theme-color">{{ dataDesc.totalNum }}</div>
+      <div class="desc-value theme-color">{{ userInoutTotal.accessCount }}</div>
       <div class="desc-unit">(次)</div>
       <div class="desc-label">进出人数：</div>
-      <div class="desc-value theme-color">{{ dataDesc.inOut }}</div>
+      <div class="desc-value theme-color">{{ userInoutTotal.accessPersonCount }}</div>
       <div class="desc-unit">(人)</div>
       <div class="desc-label">留存人数：</div>
-      <div class="desc-value">{{ dataDesc.inOut }}</div>
+      <div class="desc-value">{{ userInoutTotal.accessPersonKeepCount }}</div>
       <div class="desc-unit">(人)</div>
     </div>
     <div class="show-users">
-      <div class="users-item">
-        <div class="users-head"><img src="/images/icon-名片.svg" alt="" /></div>
+      <div class="users-item" v-if="userInoutList.length>1">
+        <div class="users-head"><img :src="userInoutList[0].personImaeg||`/images/icon-名片.svg`" alt="" /></div>
         <div class="users-desc">
-          <div class="users-desc-row">长大忙（112311）</div>
-          <div class="users-desc-row">学生</div>
-          <div class="users-desc-row">实验室02</div>
-          <div class="users-desc-row">进入时间：2020-01-02</div>
-          <div class="users-desc-row">离开时间：</div>
-          <div class="users-desc-row">留存时间：</div>
+          <div class="users-desc-row">
+            {{ userInoutList[0].personName || "" }}
+          </div>
+          <!-- 1：学生、2：职工 -->
+          <div class="users-desc-row">
+            {{ userInoutList[0].personType === "1" ? "学生" : "职工" }}
+          </div>
+          <div class="users-desc-row">
+            {{ userInoutList[0].roomName || "" }}
+          </div>
+          <!-- accTag  1：进、2：出） -->
+          <div class="users-desc-row">
+            进入时间：{{ userInoutList[0].accTag==='1'?userInoutList[0].accTime : "-" }}
+          </div>
+          <div class="users-desc-row">
+            离开时间：{{ userInoutList[0].accTag==='2'?userInoutList[0].accTime : "-" }}
+          </div>
+          <div class="users-desc-row">
+            留存时间：{{ userInoutList[0].accKeepCount || "" }}
+          </div>
         </div>
       </div>
       <div class="show-users-blank"></div>
-      <div class="users-item">
-        <div class="users-head"><img src="/images/icon-名片.svg" alt="" /></div>
+       <div class="users-item" v-if="userInoutList.length">
+        <div class="users-head"><img :src="userInoutList[1].personImaeg||`/images/icon-名片.svg`" alt="" /></div>
         <div class="users-desc">
-          <div class="users-desc-row">长大忙（112311）</div>
-          <div class="users-desc-row">学生</div>
-          <div class="users-desc-row">实验室02</div>
-          <div class="users-desc-row">进入时间：2020-01-02</div>
-          <div class="users-desc-row">离开时间：</div>
-          <div class="users-desc-row">留存时间：</div>
+          <div class="users-desc-row">
+            {{ userInoutList[1].personName || "-" }}
+          </div>
+          <!-- 1：学生、2：职工 -->
+          <div class="users-desc-row">
+            {{ userInoutList[1].personType === "1" ? "学生" : "职工" }}
+          </div>
+          <div class="users-desc-row">
+            {{ userInoutList[1].roomName || "-" }}
+          </div>
+          <!-- accTag  1：进、2：出） -->
+          <div class="users-desc-row">
+            进入时间：{{ userInoutList[1].accTag==='1'?userInoutList[1].accTime : "-" }}
+          </div>
+          <div class="users-desc-row">
+            离开时间：{{ userInoutList[1].accTag==='2'?userInoutList[1].accTime : "-" }}
+          </div>
+          <div class="users-desc-row">
+            留存时间：{{ userInoutList[1].accKeepCount || "-" }}
+          </div>
         </div>
       </div>
     </div>
@@ -50,7 +78,28 @@ export default {
         totalNum: 145,
         inOut: 4,
       },
+      userInoutList: [],
+      userInoutTotal: {},
     };
+  },
+  mounted() {
+    this.reqUserInoutTotal()
+    this.reqUserInout()
+  },
+  methods: {
+    reqUserInoutTotal() {
+      this.$http("/api/acces/queryBusAccessCount").then((res) => {
+        this.userInoutTotal = res.data;
+      });
+    },
+    reqUserInout() {
+      this.$http("/api/acces/queryBusAccessByPage", {
+        pageCurrent: 1,
+        pageRows: 2,
+      }).then((res) => {
+        this.userInoutList = res.data.rows || [];
+      });
+    },
   },
 };
 </script>
@@ -89,7 +138,7 @@ export default {
     font-size: 44px;
     font-family: Microsoft YaHei, Microsoft YaHei-Bold;
     font-weight: 700;
-    text-align: left; 
+    text-align: left;
   }
   .desc-unit {
     align-self: flex-end;

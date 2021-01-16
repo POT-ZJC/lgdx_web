@@ -19,7 +19,7 @@ export default {
   components: { headerEl, leftMenu },
   computed: {
     key() {
-      return new Date().getTime() + "" + Math.floor(Math.random());
+      return new Date().getTime() + "" + Math.floor(Math.random()*10000);
     },
   },
 };

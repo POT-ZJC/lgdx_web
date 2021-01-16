@@ -24,14 +24,26 @@ import historyInAndOut from './components/historyInAndOut'
 export default {
   data () {
     return {
-      activeName: 'today'
+      activeName: 'today',
+      tableData:[
+        {
+          "accTag": "2",//1=进 2=出
+          accKeepCount:'' ,//留存时间
+          personName:'', //名字
+          // 缺少相片，身份字段
+        }
+      ]
     }
   },
   methods: {
     handleClick () {
 
+    },
+    reqTable(){
+
     }
   },
+
   components: {
     todayInAndOut,
     historyInAndOut

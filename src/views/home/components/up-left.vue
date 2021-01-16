@@ -4,14 +4,20 @@
     <div class="title">实验室电气火灾检测统计</div>
     <div class="desc">
       <div class="desc-label">设备总数：</div>
-      <div class="desc-value theme-color">{{ dataDesc.totalNum }}</div>
+      <div class="desc-value theme-color">
+        {{ electricityTotal.devSum || 0 }}
+      </div>
       <div class="desc-unit">(个)</div>
       <div class="desc-label">设备异常：</div>
-      <div class="desc-value">{{ dataDesc.totalNum }}</div>
+      <div class="desc-value">{{ electricityTotal.abnormalSum || 0 }}</div>
       <div class="desc-unit">(个)</div>
     </div>
     <div class="charts-box">
-      <chartsBar />
+      <chartsBar
+        ref="chartsBar"
+        :dataList="[chartsBarData]"
+        :xAxisData="xAxisData"
+      />
     </div>
   </div>
 </template>
@@ -21,17 +27,41 @@ export default {
   components: { chartsBar },
   data() {
     return {
-      dataDesc: {
+      electricityTotal: {
         totalNum: 145,
         warning: 4,
       },
+      electricityTotal: {},
+      chartsBarData: {
+        name: "电气火灾检测统计",
+        data: [],
+      },
+      xAxisData: [],
     };
+  },
+  mounted() {
+    this.reqElectricityTotal();
+  },
+  methods: {
+    reqElectricityTotal() {
+      this.$http("/api/statistical/queryElectricitySafetyStatistics").then(
+        (res) => {
+          this.electricityTotal = res.data || [{}];
+          const { roomList } = res.data;
+          this.chartsBarData.data=roomList.map(val=>{
+            this.xAxisData.push(val.roomName)
+            return val.num
+          })
+           this.$refs.chartsBar.setEcharts();
+        }
+      );
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .box-layout {
-//   width: 50%;
+  //   width: 50%;
   // width: 880px;
   height: 342px;
   background: #ffffff;
@@ -64,7 +94,7 @@ export default {
     font-size: 44px;
     font-family: Microsoft YaHei, Microsoft YaHei-Bold;
     font-weight: 700;
-    text-align: left; 
+    text-align: left;
   }
   .desc-unit {
     align-self: flex-end;
@@ -72,8 +102,8 @@ export default {
     margin-right: 40px;
   }
   .charts-box {
-      width: 100%;
-      height: 220px;
+    width: 100%;
+    height: 220px;
   }
 }
 </style>

@@ -51,12 +51,51 @@
           </li>
         </ul>
         <el-table class="main-box-table" :data="tableData" stripe>
-          <el-table-column prop="date" label="设备名称" header-align="center" />
-          <el-table-column prop="name" label="编号" header-align="center" />
-          <el-table-column prop="province" label="电流（V）" header-align="center" />
-          <el-table-column prop="city" label="电压（A）" header-align="center" />
-          <el-table-column prop="address" label="剩余电流（V）" header-align="center" />
-          <el-table-column prop="zip" label="温度（℃）" header-align="center" />
+          <el-table-column prop="devName" label="设备名称" header-align="center" />
+          <el-table-column prop="devCode" label="编号" header-align="center" />
+
+          <el-table-column
+            prop="voltage"
+            label="电压（V）"
+            header-align="center"
+          />
+          <el-table-column
+            prop="electricity"
+            label="电流（A）"
+            header-align="center"
+          />
+          <!--剩余电流（V）= 漏电流 -->
+          <el-table-column
+            prop="leak"
+            label="剩余电流（A）"
+            header-align="center"
+          />
+          <el-table-column
+            prop="frequency"
+            label="频率(HZ)"
+            header-align="center"
+          />
+          <el-table-column prop="rate" label="功率(W)" header-align="center" />
+          <el-table-column
+            prop="factor"
+            label="功率因子"
+            header-align="center"
+          />
+          <el-table-column
+            prop="quantity"
+            label="电量(WH)"
+            header-align="center"
+          />
+          <el-table-column
+            prop="llineTem"
+            label="火线温度(℃)"
+            header-align="center"
+          />
+          <el-table-column
+            prop="nlineTem"
+            label="零线温度(℃)"
+            header-align="center"
+          />
         </el-table>
       </div>
     </div>
@@ -65,61 +104,26 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }]
-    }
-  }
-}
+      tableData: [],
+      tablePage: {
+        pageCurrent: 1,
+        pageRows: 10,
+      },
+    };
+  },
+  mounted() {
+    this.reqTbale();
+  },
+  methods: {
+    reqTbale() {
+      this.$http("/api/dev/queryElectricitySafetyByPage").then((res) => {
+        this.tableData = res.data.rows || [];
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

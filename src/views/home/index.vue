@@ -45,46 +45,46 @@
     <div class="down-banner">
       <div class="banner-desc">
         <div class="banner-title">照明情况统计</div>
-
         <div class="banner-desc-row">
           <div class="desc-label">设备总数：</div>
-          <div class="desc-value theme-color">{{ 11 }}</div>
+          <div class="desc-value theme-color">
+            {{ zhaomingData.devSum || 0 }}
+          </div>
           <div class="desc-unit">（个）</div>
         </div>
         <div class="banner-desc-row">
           <div class="desc-label">设备异常：</div>
-          <div class="desc-value">{{ 11 }}</div>
+          <div class="desc-value">{{ zhaomingData.abnormalSum || 0 }}</div>
           <div class="desc-unit">（个）</div>
         </div>
       </div>
 
       <div class="banner-content">
-        <div class="banner-item" style="width: 90px">
+        <div
+          class="banner-item"
+          style="width: 90px"
+          :key="index"
+          v-for="(item, index) in zhaomingDevList"
+        >
           <div class="item-icon">
             <img :src="require('@/asstes/images/灯泡.svg')" alt="" />
           </div>
-          <div class="item-row">名称</div>
+          <div class="item-row name" :title="item.devName">
+            {{ item.devName }}
+          </div>
           <div class="item-row">
-            状态：<span :style="`color:${true ? '#2aff46' : '#ff2a2a'}`"
+            状态：<span
+              :style="`color:${item.devTage === '1' ? '#2aff46' : '#ff2a2a'}`"
               >开启</span
             >
           </div>
-          <div class="item-row">
-            开关：<el-switch v-model="switchvalue1" :width="24"> </el-switch>
-          </div>
-        </div>
-        <div class="banner-item" style="width: 90px">
-          <div class="item-icon">
-            <img :src="require('@/asstes/images/灯泡.svg')" alt="" />
-          </div>
-          <div class="item-row">名称</div>
-          <div class="item-row">
-            状态：<span :style="`color:${true ? '#2aff46' : '#ff2a2a'}`"
-              >开启</span
+          <div :class="`item-row ${item.devTage !== '1' && 'item-error'}`">
+            开关：<el-switch
+              v-model="item.isOpen"
+              @change="reqChangeOpen(item, 'reqzhaoming')"
+              :width="24"
             >
-          </div>
-          <div class="item-row">
-            开关：<el-switch v-model="switchvalue1" :width="24"> </el-switch>
+            </el-switch>
           </div>
         </div>
       </div>
@@ -95,29 +95,45 @@
 
         <div class="banner-desc-row">
           <div class="desc-label">设备总数：</div>
-          <div class="desc-value theme-color">{{ 11 }}</div>
+          <div class="desc-value theme-color">
+            {{ chuanglianData.devSum || 0 }}
+          </div>
           <div class="desc-unit">（个）</div>
         </div>
         <div class="banner-desc-row">
           <div class="desc-label">设备异常：</div>
-          <div class="desc-value">{{ 11 }}</div>
+          <div class="desc-value">{{ chuanglianData.abnormalSum || 0 }}</div>
           <div class="desc-unit">（个）</div>
         </div>
       </div>
 
       <div class="banner-content">
-        <div class="banner-item" style="width: 90px">
+        <div
+          class="banner-item"
+          style="width: 90px"
+          :key="index"
+          v-for="(item, index) in chuanglianDevList"
+        >
           <div class="item-icon">
             <img :src="require('@/asstes/images/操作-窗帘.svg')" alt="" />
           </div>
-          <div class="item-row">名称</div>
-          <div class="item-row">
-            状态：<span :style="`color:${false ? '#2aff46' : '#ff2a2a'}`"
-              >开启</span
-            >
+          <div class="item-row name" :title="item.devName">
+            {{ item.devName }}
           </div>
-          <div :class="`item-row ${'item-error'}`">
-            开关：<el-switch v-model="switchvalue1" :width="24"> </el-switch>
+          <div class="item-row">
+            状态：
+            <span v-if="item.devTage === '1'" :style="`color: #2aff46'`"
+              >正常</span
+            >
+            <span v-else :style="`color:#ff2a2a}`">异常</span>
+          </div>
+          <div :class="`item-row ${item.devTage !== '1' && 'item-error'}`">
+            开关：<el-switch
+              v-model="item.isOpen"
+              :width="24"
+              @change="reqChangeOpen(item, 'reqChuanglian')"
+            >
+            </el-switch>
           </div>
         </div>
       </div>
@@ -130,7 +146,56 @@ import upRight from "./components/up-right";
 export default {
   components: { upLeft, upRight },
   data() {
-    return { switchvalue1: true };
+    return {
+      switchvalue1: false,
+      zhaomingData: {
+        devList: [],
+      },
+      zhaomingDevList: [],
+      chuanglianData: {},
+      chuanglianDevList: [],
+    };
+  },
+  mounted() {
+    this.reqzhaoming();
+    this.reqChuanglian();
+  },
+  methods: {
+    async reqChangeOpen(item, type) {
+      const { devCode, devIsc, devActive } = item;
+
+      const res = await this.$http("/api/dev/setAttributeValue", {
+        devCode,
+        devIsc,
+        devActive: devActive === "0" ? "1" : "0",
+      });
+      if (!res) {
+        this.$message.error("操作失败");
+      }
+      this[type]();
+    },
+    reqzhaoming() {
+      this.$http("/api/statistical/queryLightingStatistics").then((res) => {
+        this.zhaomingData = res.data;
+        this.zhaomingDevList = res.data.devList.map((val) => {
+          return {
+            ...val,
+            isOpen: val.devActive === "1" ? true : false,
+          };
+        });
+      });
+    },
+    reqChuanglian() {
+      this.$http("/api/statistical/queryCurtainsStatistics").then((res) => {
+        this.chuanglianData = res.data;
+        this.chuanglianDevList = res.data.devList.map((val) => {
+          return {
+            ...val,
+            isOpen: val.devActive === "1" ? true : false,
+          };
+        });
+      });
+    },
   },
 };
 </script>
@@ -191,7 +256,7 @@ export default {
         }
         .desc-unit {
           align-self: flex-end;
-          font-size: 16px; 
+          font-size: 16px;
         }
       }
     }
@@ -216,12 +281,15 @@ export default {
         .item-row {
           color: #777777;
           line-height: 18px;
-          display: flex;
+          text-align: center;
           font-size: 12px;
-          justify-content: center;
-          align-items: center;
         }
-
+        .name {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          word-break: break-all;
+        }
         /deep/.el-switch {
           line-height: 12px;
           height: 12px;

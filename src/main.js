@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router' 
+import router from './router'
 import store from './store'
-import {http} from './api'
+import { http } from './api'
 // import {
 //   Icon, Tree, Dialog, Button, Pagination
 //   // Select
@@ -13,15 +13,32 @@ import '../element-variables.scss'
 // import VueAwesomeSwiper from 'vue-awesome-swiper' 
 // import 'swiper/swiper-bundle.css' 
 
-Vue.prototype.$http = http
-Vue.prototype.$store = store
+const whiteList = ['/login','/laboratoryDetail'] 
+router.beforeEach(async (to, from, next) => { 
+  if (whiteList.includes(to.path)) {
+    next()
+    return
+  }
+  let user = window.sessionStorage.getItem('user')
+  if (user) {
+    user = JSON.parse(user)
+    store.user = user;
+    next()
+    return
+  } else {
+    next('/login')
+    return
+  } 
+})
 
+Vue.prototype.$store = store
+Vue.prototype.$http = http
 Vue.use(ElementUI, {
   size: 'mini'
 })
 // Vue.use(VueAwesomeSwiper)
 // Vue.mixin(mixin);
 new Vue({
-  router,  
+  router,
   render: h => h(App)
 }).$mount('#app')

@@ -201,7 +201,7 @@ export default {
     height: 50px;
     box-sizing: border-box;
     // background: rgba(128, 134, 149, 0.1);
-    font-size: 14px;
+    font-size: 13px;
     font-family: MicrosoftYaHei, MicrosoftYaHei-Bold;
     font-weight: 700;
     // text-align: left;

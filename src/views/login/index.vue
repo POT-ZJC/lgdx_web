@@ -2,18 +2,51 @@
   <div class="Login">
     <div class="main">
       <div class="main-head">
-        <img class="main-head-logo" src="./img/logo.png" alt="logo">
+        <img class="main-head-logo" src="./img/logo.png" alt="logo" />
         <p class="main-head-text">登陆</p>
       </div>
       <div class="main-form" v-show="!error">
         <label class="main-form-label">
           <p class="key">账号</p>
-          <input class="val" type="text" v-model="form.userName" placeholder="请输入账号" maxlength="15">
+          <input
+            class="val"
+            type="text"
+            v-model="form.userName"
+            placeholder="请输入账号"
+            maxlength="15"
+          />
         </label>
         <label class="main-form-label">
           <p class="key">密码</p>
-          <input class="val" type="password" v-model="form.userPass" placeholder="请输入密码" maxlength="15">
+          <input
+            class="val"
+            type="password"
+            v-model="form.userPass"
+            placeholder="请输入密码"
+            maxlength="15"
+          />
         </label>
+        <label class="main-form-label">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <input
+              class="val"
+              style="width: 240px"
+              type="text"
+              v-model.trim="form.verificationCode"
+              placeholder="验证码"
+              maxlength="4"
+            />
+            <img :src="verificationImgpath" alt=""  @click="verificationImg" width="120" height="50" />
+          </div>
+        </label>
+
+        <!-- http://113.204.236.218:9087/api/getVerificationCode -->
         <a class="main-form-submit" @click="login">登陆</a>
         <a class="main-form-forgot">忘记密码</a>
       </div>
@@ -28,39 +61,54 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       form: {
-        userName: '',
-        userPass: '',
-        verificationCode: 'f6gp',
+        userName: "",
+        userPass: "",
+        verificationCode: "",
       },
-      error: false
-    }
+      verificationImgpath: "",
+      error: false,
+    };
+  },
+  computed: {},
+  mounted() {
+    this.verificationImg();
   },
   methods: {
-    async login () {
-      const { userName, userPass } = this.form
+    verificationImg() {
+      this.verificationImgpath =
+        "http://113.204.236.218:9087/api/getVerificationCode?random=" +
+        Math.random();
+    },
+    async login() {
+      const { userName, userPass,verificationCode } = this.form;
       if (!userName.trim() || !userPass.trim()) {
-        this.$message.error('账号和密码必填。');
-        return
+        this.$message.error("账号和密码必填。");
+        return;
       }
       if (userName.trim().length < 6 || userPass.trim().length < 6) {
-        this.$message.error('账号和密码最少6位。');
-        return
+        this.$message.error("账号和密码最少6位。");
+        return;
       }
-      const res = await this.$http('/api/login', this.form)
+      if (verificationCode.length !== 4) {
+        this.$message.error("请输入4位验证码");
+        return;
+      }
+      const res = await this.$http("/api/login", this.form);
       if (+res.resultCode === 200) {
         this.$message({
-          message: '登录成功',
-          type: 'success'
-        })
-        this.$store.user = res.data
-        this.$router.push('/home/index')
+          message: "登录成功",
+          type: "success",
+        });
+        this.$store.user = res.data;
+        window.sessionStorage.setItem('user',JSON.stringify( res.data))
+        this.$router.push("/home/index");
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

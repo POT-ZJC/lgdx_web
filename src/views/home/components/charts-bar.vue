@@ -5,11 +5,7 @@
 <script>
 import echarts from "echarts";
 export default {
-  props: {
-    isToAmount: {
-      type: Boolean,
-      default: false,
-    },
+  props: { 
     refName: {
       type: String,
       default: "",
@@ -39,7 +35,9 @@ export default {
     },
     xAxisData: {
       type: Array,
-      default: () => ["2015", "2016", "2017", "2018", "2019", "2020", "2021"],
+      default: () => [
+        
+      ],
     },
     legendData: {
       type: Array,
@@ -138,14 +136,15 @@ export default {
       let fontColor = "#272A39";
       let option = {
         color: this.colors,
-        // legend: {
-        //     data: this.legendData,
-        //     itemWidth: 10,
-        //     itemHeight: 10,
-        //     textStyle: {
-        //         color: '#ccc'
-        //     }
-        // },
+        legend: {
+          show:false
+            // data: this.legendData,
+            // itemWidth: 10,
+            // itemHeight: 10,
+            // textStyle: {
+            //     color: '#ccc'
+            // }
+        },
         dataZoom: [{ type: "inside", ...this.dataZoom }],
         grid: {
           containLabel: true,
@@ -184,6 +183,8 @@ export default {
           nameTextStyle: {
             color: fontColor,
           },
+          min:1,
+          // max:2,
           axisLabel: {
             textStyle: {
               color: fontColor,

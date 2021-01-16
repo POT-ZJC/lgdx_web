@@ -9,9 +9,9 @@
       <div class="head-title">安全智慧实验室</div>
       <div class="head-right">
         <img src="./img/账号.png" class="account" alt="账号" />
-        <div class="account-name">我是猫猫喔</div>
+        <div class="account-name">{{$store.user.userName}}</div>
         <img src="./img/设置.png" class="setting" alt="设置" />
-        <img src="./img/退出 (1).png" class="exit" alt="退出" />
+        <img src="./img/退出 (1).png" class="exit" @click="$router.push('/login')" alt="退出" />
       </div>
     </div>
   </div>
