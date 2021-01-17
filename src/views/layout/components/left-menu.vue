@@ -58,6 +58,10 @@ export default {
               path: "/laboratory/electricalHistory",
             },
             {
+              name: "人员管理",
+              path: "/userManage/userList",
+            },
+            {
               name: "人员进出管理",
               path: "/laboratory/personnelInAndOut",
             },
@@ -69,6 +73,7 @@ export default {
               name: "窗帘控制",
               path: "/control/curtain",
             },
+
             {
               name: "一体机",
               path: "/equipment/IntegratedMachine",
@@ -136,7 +141,7 @@ export default {
           }
         } else {
           if (menu.isNewWindow) {
-            window.open('/#'+menu.path);
+            window.open("/#" + menu.path);
           } else {
             this.$router.push(menu.path);
           }

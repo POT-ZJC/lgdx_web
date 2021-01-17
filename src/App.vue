@@ -161,4 +161,7 @@ body {
 .error-color {
   color: #ff2a2a;
 }
+ .el-breadcrumb__inner a{
+    color: #42c9a8 !important;
+}
 </style>

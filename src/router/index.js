@@ -57,6 +57,22 @@ const routes = [
         }
       },
       {
+        path: '/userManage/userList',
+        name: '人员管理',
+        component: () => import('@/views/userManage/user-list'),
+        meta: {
+          menu: '/userManage/userList',
+        }
+      }, 
+      {
+        path: '/userManage/userEdit',
+        name: '人员编辑',
+        component: () => import('@/views/userManage/edit-user'),
+        meta: {
+          menu: '/userManage/userList',
+        }
+      },
+      {
         path: '/laboratory/personnelInAndOut',
         name: '人员进出管理',
         component: () => import('@/views/laboratory/personnelInAndOut'),
