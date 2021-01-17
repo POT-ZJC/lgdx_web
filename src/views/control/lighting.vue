@@ -101,6 +101,7 @@ export default {
         devIsc: data.devIsc,
         devActive: data.switch ? '1' : '0'
       })
+      if (+res.resultCode === 200) this.getData()
     }
   },
   created () {

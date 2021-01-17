@@ -1,28 +1,13 @@
 <template>
-  <div
-    class="left-menu"
-    :style="`width:${secondMenu.length > 1 ? 220 : 100}px`"
-  >
+  <div class="left-menu" :style="`width:${secondMenu.length > 1 ? 220 : 100}px`">
     <div class="menu-first">
-      <div
-        class="first-item"
-        :class="{ 'first-item-active': firstMenuKey === item.path }"
-        v-for="(item, index) in menuList"
-        :key="index"
-        @click="firstMenuClick(item)"
-      >
+      <div class="first-item" :class="{ 'first-item-active': firstMenuKey === item.path }" v-for="(item, index) in menuList" :key="index" @click="firstMenuClick(item)">
         <img :src="item.icon" alt="" class="icon" />
         <div class="first-item-name">{{ item.name }}</div>
       </div>
     </div>
     <div class="menu-second" v-show="secondMenu.length > 1">
-      <div
-        class="second-item"
-        :class="{ 'second-item-active': secondMenuKey === item.path }"
-        v-for="(item, index) in secondMenu"
-        :key="index"
-        @click="secondMenuClick(item)"
-      >
+      <div class="second-item" :class="{ 'second-item-active': secondMenuKey === item.path }" v-for="(item, index) in secondMenu" :key="index" @click="secondMenuClick(item)">
         <div class="second-item-name">{{ item.name }}</div>
       </div>
     </div>
@@ -30,7 +15,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       menuList: [
         {
@@ -52,10 +37,6 @@ export default {
             {
               name: "电气火灾检测",
               path: "/laboratory/electricalTesting",
-            },
-            {
-              name: "电气火灾历史数据",
-              path: "/laboratory/electricalHistory",
             },
             {
               name: "人员进出管理",
@@ -101,10 +82,10 @@ export default {
       ],
     };
   },
-  created() {},
+  created () { },
   watch: {
     $route: {
-      handler(val) {
+      handler (val) {
         const { matched } = val;
         console.log(matched);
         this.firstMenuKey = matched[0].path;
@@ -127,7 +108,7 @@ export default {
     },
   },
   methods: {
-    firstMenuClick(menu) {
+    firstMenuClick (menu) {
       console.log(menu);
       if (this.firstMenuKey !== menu.path) {
         if (menu.children && menu.children.length) {
@@ -136,7 +117,7 @@ export default {
           }
         } else {
           if (menu.isNewWindow) {
-            window.open('/#'+menu.path);
+            window.open('/#' + menu.path);
           } else {
             this.$router.push(menu.path);
           }
@@ -144,7 +125,7 @@ export default {
       } else {
       }
     },
-    secondMenuClick(menu) {
+    secondMenuClick (menu) {
       if (this.secondMenuKey !== menu.path) {
         this.secondMenuKey = menu.path;
         this.$router.push(this.secondMenuKey);
