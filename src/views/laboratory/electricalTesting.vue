@@ -50,7 +50,7 @@
             </p>
           </li>
         </ul>
-        <el-table class="main-box-table" :data="tableData" stripe>
+        <el-table class="main-box-table" :data="tableData" stripe @row-click="rowClick">
           <el-table-column prop="devName" label="设备名称" header-align="center" />
           <el-table-column prop="devCode" label="编号" header-align="center" />
 
@@ -93,6 +93,9 @@ export default {
     };
   },
   methods: {
+    rowClick (data) {
+      this.$router.push({ path: '/laboratory/electricalHistory', query: { devId: data.devId } })
+    },
     reqTbale () {
       this.$http("/api/dev/queryElectricitySafetyByPage").then((res) => {
         this.tableData = res.data.rows || [];

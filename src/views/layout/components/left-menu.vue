@@ -54,10 +54,6 @@ export default {
               path: "/laboratory/electricalTesting",
             },
             {
-              name: "电气火灾历史数据",
-              path: "/laboratory/electricalHistory",
-            },
-            {
               name: "人员管理",
               path: "/userManage/userList",
             },
@@ -88,6 +84,10 @@ export default {
         {
           icon: "/images/工具-2.svg",
           name: "设备",
+        },
+        {
+          icon: "/images/实验室.svg",
+          name: "实验室展示",
           path: "/laboratoryDetail",
           isNewWindow: true,
         },
@@ -111,7 +111,7 @@ export default {
     $route: {
       handler(val) {
         const { matched } = val;
-        console.log(matched);
+        // console.log(matched);
         this.firstMenuKey = matched[0].path;
         if (matched[1]) {
           this.secondMenuKey = matched[1].meta.menu;
@@ -133,27 +133,20 @@ export default {
   },
   methods: {
     firstMenuClick(menu) {
-      console.log(menu);
-      if (this.firstMenuKey !== menu.path) {
-        if (menu.children && menu.children.length) {
-          if (this.secondMenuKey !== menu.children[0].path) {
-            this.$router.push(menu.children[0].path);
-          }
+      if (menu.children && menu.children.length) {
+        this.$router.push(menu.children[0].path + "?=random" + Math.random());
+      } else if (menu.path) {
+        if (menu.isNewWindow) {
+          window.open("/#" + menu.path);
         } else {
-          if (menu.isNewWindow) {
-            window.open("/#" + menu.path);
-          } else {
-            this.$router.push(menu.path);
-          }
+          this.$router.push(menu.path + "?=random" + Math.random());
         }
       } else {
+        this.$message.info("模块开发中");
       }
     },
     secondMenuClick(menu) {
-      if (this.secondMenuKey !== menu.path) {
-        this.secondMenuKey = menu.path;
-        this.$router.push(this.secondMenuKey);
-      }
+      this.$router.push(menu.path + "?=random" + Math.random());
     },
   },
 };
