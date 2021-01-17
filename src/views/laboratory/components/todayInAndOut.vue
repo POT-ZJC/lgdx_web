@@ -6,41 +6,53 @@
         <li class="head-list-item">
           <p class="key">进出人次：</p>
           <p class="val">
-            <span class="val-num green">145</span>
+            <span class="val-num green">{{accessCount}}</span>
             <span class="val-unit">（个）</span>
           </p>
         </li>
         <li class="head-list-item">
           <p class="key">进出人数：</p>
           <p class="val">
-            <span class="val-num green">145</span>
+            <span class="val-num green">{{accessPersonCount}}</span>
             <span class="val-unit">（个）</span>
           </p>
         </li>
         <li class="head-list-item">
           <p class="key">人员留存：</p>
           <p class="val">
-            <span class="val-num">145</span>
+            <span class="val-num">{{accessPersonKeepCount}}</span>
             <span class="val-unit">（个）</span>
           </p>
         </li>
       </ul>
     </div>
     <el-table class="table" :data="tableData" stripe>
-      <el-table-column prop="date" label="序号" header-align="center" />
-      <el-table-column prop="name" label="相片" header-align="center">
+      <el-table-column label="序号" header-align="center">
         <template slot-scope="scope">
-          <div>{{scope.row.name}}</div>
+          <div>{{scope.$index + 1}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="province" label="姓名" header-align="center" />
-      <el-table-column prop="city" label="身份" header-align="center" />
-      <el-table-column prop="address" label="状态" header-align="center" />
-      <el-table-column prop="zip" label="留存时间" header-align="center" />
-      <el-table-column prop="zip" label="时间" header-align="center" />
+      <el-table-column prop="name" label="相片" header-align="center">
+        <template slot-scope="scope">
+          <img :src="scope.row.personImaeg" alt="personImaeg" style="height: 100%;">
+        </template>
+      </el-table-column>
+      <el-table-column prop="personName" label="姓名" header-align="center" />
+      <el-table-column label="身份" header-align="center">
+        <template slot-scope="scope">
+          <div>{{{1: '学生', 2: '职工'}[scope.row.personType]}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" header-align="center">
+        <template slot-scope="scope">
+          <div>{{{1: '进', 2: '出'}[scope.row.accTag]}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="accKeepCount" label="留存时间" header-align="center" />
+      <el-table-column prop="accTime" label="时间" header-align="center" />
     </el-table>
     <div class="pagination">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="100" layout="total, prev, pager, next, jumper" :total="1000" />
+      <el-pagination background @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next, jumper" :total="total" />
       <a class="pagination-btn">确定</a>
     </div>
   </div>
@@ -50,66 +62,38 @@
 export default {
   data () {
     return {
+      accessCount: 2,
+      accessPersonCount: 1,
+      accessPersonKeepCount: 0,
       currentPage: 1,
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }]
+      size: 10,
+      total: 0,
+      tableData: [],
     }
   },
   methods: {
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`);
+    async getData () {
+      const res = await this.$http('/api/acces/queryBusAccessCount')
+      this.accessCount = res.data.accessCount
+      this.accessPersonCount = res.data.accessPersonCount
+      this.accessPersonKeepCount = res.data.accessPersonKeepCount
+    },
+    async getTable () {
+      const res = await this.$http('/api/acces/queryBusAccessByPage', {
+        pageCurrent: this.currentPage,
+        pageRows: this.size
+      })
+      this.total = res.data.rowSum
+      this.tableData = res.data.rows
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`);
+      this.currentPage = val
+      this.getTable()
     }
+  },
+  created () {
+    this.getData()
+    this.getTable()
   }
 }
 </script>

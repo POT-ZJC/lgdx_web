@@ -2,30 +2,42 @@
   <div class="HistoryInAndOut">
     <div class="search">
       <p class="search-title">选择日期</p>
-      <el-date-picker v-model="time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+      <el-date-picker v-model="time" type="date" placeholder="选择日期">
       </el-date-picker>
       <p class="search-title">选择状态</p>
-      <el-select v-model="state" placeholder="请选择">
+      <el-select v-model="state" placeholder="选择状态">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <a class="search-btn">搜索</a>
+      <a class="search-btn" @click="search">搜索</a>
     </div>
-    <el-table class="table" :data="tableData" stripe>
-      <el-table-column prop="date" label="序号" header-align="center" />
-      <el-table-column prop="name" label="相片" header-align="center">
+    <el-table class="table" :data="showTable" stripe>
+      <el-table-column label="序号" header-align="center">
         <template slot-scope="scope">
-          <div>{{scope.row.name}}</div>
+          <div>{{scope.$index + 1}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="province" label="姓名" header-align="center" />
-      <el-table-column prop="city" label="身份" header-align="center" />
-      <el-table-column prop="address" label="状态" header-align="center" />
-      <el-table-column prop="zip" label="留存时间" header-align="center" />
-      <el-table-column prop="zip" label="时间" header-align="center" />
+      <el-table-column prop="name" label="相片" header-align="center">
+        <template slot-scope="scope">
+          <img :src="scope.row.personImaeg" alt="personImaeg" style="height: 100%;">
+        </template>
+      </el-table-column>
+      <el-table-column prop="personName" label="姓名" header-align="center" />
+      <el-table-column label="身份" header-align="center">
+        <template slot-scope="scope">
+          <div>{{{1: '学生', 2: '职工'}[scope.row.personType]}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" header-align="center">
+        <template slot-scope="scope">
+          <div>{{{1: '进', 2: '出'}[scope.row.accTag]}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="accKeepCount" label="留存时间" header-align="center" />
+      <el-table-column prop="accTime" label="时间" header-align="center" />
     </el-table>
     <div class="pagination">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="100" layout="total, prev, pager, next, jumper" :total="1000" />
+      <el-pagination background @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next, jumper" :total="total" />
       <a class="pagination-btn">确定</a>
     </div>
   </div>
@@ -37,82 +49,53 @@ export default {
     return {
       time: '',
       state: '',
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      options: [
+        {
+          value: 0,
+          label: '全部'
+        },
+        {
+          value: 1,
+          label: '进'
+        }, {
+          value: 2,
+          label: '出'
+        }
+      ],
       currentPage: 1,
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }]
+      size: 10,
+      total: 0,
+      tableData: [],
     }
   },
   methods: {
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`);
+    async getTable (time) {
+      const data = {
+        pageCurrent: this.currentPage,
+        pageRows: this.size
+      }
+      if (time) data.accParamTime = time
+      const res = await this.$http('/api/acces/queryBusAccessByPage', data)
+      this.total = res.data.rowSum
+      this.tableData = res.data.rows
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`);
+      this.currentPage = val
+      this.getTable()
+    },
+    search () {
+      this.getTable(this.time.toLocaleDateString().replaceAll('/', '-'))
     }
+  },
+  computed: {
+    showTable () {
+      if (!this.tableData[0]) return []
+      if (!this.state) return this.tableData
+      return this.tableData.filter(item => +item.accTag === this.state)
+    }
+  },
+  created () {
+    this.getTable()
   }
 }
 </script>
