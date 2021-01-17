@@ -9,13 +9,35 @@
       <div class="head-title">安全智慧实验室</div>
       <div class="head-right">
         <img src="./img/账号.png" class="account" alt="账号" />
-        <div class="account-name">{{$store.user.userName}}</div>
+        <div class="account-name">{{ $store.user.userName }}</div>
         <img src="./img/设置.png" class="setting" alt="设置" />
-        <img src="./img/退出 (1).png" class="exit" @click="$router.push('/login')" alt="退出" />
+        <img
+          src="./img/退出 (1).png"
+          class="exit"
+          @click="exitLogin"
+          alt="退出"
+        />
       </div>
     </div>
   </div>
 </template>
+<script>
+export default {
+  methods: {
+    exitLogin() {
+      this.$confirm(`确认退出账号:${this.$store.user.userName}?`, "退出登录", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        this.$store.user = {};
+        sessionStorage.setItem("user", "");
+        this.$router.push("/login");
+      });
+    },
+  },
+};
+</script>
 <style lang="scss" scoped>
 .layout-head {
   width: 100%;
