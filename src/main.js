@@ -10,8 +10,6 @@ import { http } from './api'
 import ElementUI from 'element-ui'
 // 自定义element-ui主题
 import '../element-variables.scss'
-// import VueAwesomeSwiper from 'vue-awesome-swiper' 
-// import 'swiper/swiper-bundle.css' 
 
 const whiteList = ['/login','/laboratoryDetail'] 
 router.beforeEach(async (to, from, next) => { 
@@ -36,7 +34,6 @@ Vue.prototype.$http = http
 Vue.use(ElementUI, {
   size: 'mini'
 })
-// Vue.use(VueAwesomeSwiper)
 // Vue.mixin(mixin);
 new Vue({
   router,

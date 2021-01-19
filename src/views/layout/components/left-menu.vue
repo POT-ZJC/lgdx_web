@@ -61,6 +61,19 @@ export default {
               name: "人员进出管理",
               path: "/laboratory/personnelInAndOut",
             },
+
+            // {
+            //   name: "一体机",
+            //   path: "/equipment/IntegratedMachine",
+            // },
+          ],
+        },
+
+        {
+          icon: "/images/控制.svg",
+          name: "控制系统",
+          path: "/control",
+          children: [
             {
               name: "照明控制",
               path: "/control/lighting",
@@ -69,22 +82,9 @@ export default {
               name: "窗帘控制",
               path: "/control/curtain",
             },
-
-            {
-              name: "一体机",
-              path: "/equipment/IntegratedMachine",
-            },
           ],
         },
 
-        {
-          icon: "/images/控制.svg",
-          name: "控制系统",
-        },
-        {
-          icon: "/images/工具-2.svg",
-          name: "设备",
-        },
         {
           icon: "/images/实验室.svg",
           name: "实验室展示",

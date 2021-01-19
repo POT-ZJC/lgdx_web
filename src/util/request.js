@@ -40,11 +40,11 @@ service.interceptors.request.use(
     // do something before request is sent
     // config.headers['Content-Type'] = 'application/json;charset=utf-8'
     // config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-  
+
 
     try {
       let data = config.data
-      if ((typeof data === 'object')) { 
+      if ((typeof data === 'object')) {
         const formData = new FormData();
         for (let key in data) {
           formData.append(key, data[key])
@@ -54,7 +54,7 @@ service.interceptors.request.use(
 
     } catch (err) {
       console.log(err)
-    } 
+    }
     config.timeout = 90 * 1000
     config.headers['scope'] = 'web'
     addGlobalLoading(config)
@@ -96,7 +96,7 @@ service.interceptors.response.use(
       //         })
       //     })
       // }
-      return Promise.resolve(res)
+      return Promise.reject(res)
     } else {
       return res
     }
